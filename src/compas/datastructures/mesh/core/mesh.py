@@ -6,7 +6,7 @@ import collections
 import sys
 from math import pi
 
-from compas.datastructures.mesh.core.halfedge import HalfEdge
+from .halfedge import HalfEdge
 
 from compas.files import OBJ
 from compas.files import OFF
@@ -31,8 +31,8 @@ from compas.geometry import add_vectors
 from compas.geometry import subtract_vectors
 from compas.geometry import sum_vectors
 from compas.geometry import midpoint_line
+from compas.geometry import vector_average
 
-from compas.utilities import average
 from compas.utilities import geometric_key
 from compas.utilities import pairwise
 from compas.utilities import window
@@ -241,7 +241,7 @@ class BaseMesh(HalfEdge):
         mesh = cls.from_vertices_and_faces(vertices, faces)
         return mesh
 
-    def to_stl(self, filepath, precision=None, **kwargs):
+    def to_stl(self, filepath, precision=None, binary=False, **kwargs):
         """Write a mesh to an STL file.
 
         Parameters
@@ -251,6 +251,9 @@ class BaseMesh(HalfEdge):
         precision : str, optional
             Rounding precision for the vertex coordinates.
             Default is ``"3f"``.
+        binary : bool, optional
+            When ``False``, the file will be written in ASCII encoding,
+            when ``True``, binary.  Default is ``False``.
 
         Returns
         -------
@@ -259,13 +262,11 @@ class BaseMesh(HalfEdge):
         Notes
         -----
         STL files only support triangle faces.
-        However, the writer does not perform any checks
-        and will just treat every face as a triangle.
         It is your responsibility to convert all faces of your mesh to triangles.
         For example, with :func:`compas.datastructures.mesh_quads_to_triangles`.
         """
         stl = STL(filepath, precision)
-        stl.write(self, **kwargs)
+        stl.write(self, binary=binary, **kwargs)
 
     @classmethod
     def from_off(cls, filepath):
@@ -470,7 +471,7 @@ class BaseMesh(HalfEdge):
         --------
         >>>
         """
-        p = Polyhedron(f)
+        p = Polyhedron.from_platonicsolid(f)
         return cls.from_vertices_and_faces(p.vertices, p.faces)
 
     @classmethod
@@ -495,6 +496,7 @@ class BaseMesh(HalfEdge):
         """
         vertices, faces = shape.to_vertices_and_faces(**kwargs)
         mesh = cls.from_vertices_and_faces(vertices, faces)
+        mesh.name = shape.name
         return mesh
 
     @classmethod
@@ -1235,8 +1237,23 @@ class BaseMesh(HalfEdge):
         centroid = self.face_centroid(fkey)
         plane = bestfit_plane(points)
         max_deviation = max([distance_point_plane(point, plane) for point in points])
-        average_distances = average([distance_point_point(point, centroid) for point in points])
+        average_distances = vector_average([distance_point_point(point, centroid) for point in points])
         return max_deviation / average_distances
+
+    def face_plane(self, face):
+        """A plane defined by the centroid and the normal of the face.
+
+        Parameters
+        ----------
+        face : int
+            The face identifier.
+
+        Returns
+        -------
+        tuple
+            point, vector
+        """
+        return self.face_centroid(face), self.face_normal(face)
 
     # --------------------------------------------------------------------------
     # boundary

@@ -35,7 +35,7 @@ __copyright__ = 'Copyright 2014-2019 - Block Research Group, ETH Zurich'
 __license__ = 'MIT License'
 __email__ = 'vanmelet@ethz.ch'
 
-__version__ = '0.16.2'
+__version__ = '0.16.9'
 
 
 PY3 = sys.version_info[0] == 3
@@ -72,7 +72,7 @@ except Exception:
     pass
 
 
-__all__ = ['WINDOWS', 'LINUX', 'MONO', 'IPY', 'RHINO', 'GH', 'BLENDER', 'set_precision', 'get']
+__all__ = ['WINDOWS', 'LINUX', 'MONO', 'IPY', 'RHINO', 'BLENDER', 'set_precision', 'get']
 
 
 def is_windows():
@@ -147,18 +147,6 @@ def is_rhino():
 RHINO = is_rhino()
 
 
-def is_grasshopper():
-    try:
-        import Grasshopper  # noqa : F401
-    except ImportError:
-        return False
-    else:
-        return True
-
-
-GH = is_grasshopper()
-
-
 def is_blender():
     try:
         import bpy  # noqa : F401
@@ -230,7 +218,7 @@ def get(filename):
     The file name should be specified relative to the **COMPAS** sample data folder.
     This folder is only locally available if you installed **COMPAS** from source,
     or if you are working directly with the source.
-    In all other cases, the function will get the corresponding files direcly from
+    In all other cases, the function will get the corresponding files directly from
     the GitHub repo, at https://raw.githubusercontent.com/compas-dev/compas/master/data
 
     Examples

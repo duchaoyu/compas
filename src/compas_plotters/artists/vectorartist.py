@@ -1,7 +1,3 @@
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import division
-
 from matplotlib.patches import FancyArrowPatch
 from matplotlib.patches import ArrowStyle
 
@@ -16,18 +12,21 @@ class VectorArtist(Artist):
 
     zorder = 3000
 
-    def __init__(self, vector, point=None, draw_point=False):
-        super(VectorArtist, self).__init__()
+    def __init__(self, vector, point=None, draw_point=False, color=(0, 0, 0)):
+        super(VectorArtist, self).__init__(vector)
         self._draw_point = draw_point
-        self.width = 1.0
-        self.color = '#000000'
+        self._mpl_vector = None
+        self._point_artist = None
         self.point = point or Point(0.0, 0.0, 0.0)
         self.vector = vector
-        self.mpl_vector = None
-        self.point_artist = None
+        self.color = color
+
+    @property
+    def data(self):
+        return [self.point[:2], (self.point + self.vector)[:2]]
 
     def draw(self):
-        style = ArrowStyle("Simple, head_length=.1, head_width=.1, tail_width=.01")
+        style = ArrowStyle("Simple, head_length=.1, head_width=.1, tail_width=.02")
         arrow = FancyArrowPatch(self.point[:2], (self.point + self.vector)[:2],
                                 arrowstyle=style,
                                 edgecolor=self.color,
@@ -35,11 +34,11 @@ class VectorArtist(Artist):
                                 zorder=self.zorder,
                                 mutation_scale=100)
         if self._draw_point:
-            self.point_artist = self.plotter.add(self.point)
-        self.mpl_vector = self.plotter.axes.add_patch(arrow)
+            self._point_artist = self.plotter.add(self.point)
+        self._mpl_vector = self.plotter.axes.add_patch(arrow)
 
     def redraw(self):
-        self.mpl_vector.set_positions(self.point[:2], (self.point + self.vector)[:2])
+        self._mpl_vector.set_positions(self.point[:2], (self.point + self.vector)[:2])
 
 
 # ==============================================================================
@@ -54,7 +53,9 @@ if __name__ == '__main__':
     from compas.geometry import Line
     from compas.geometry import Rotation
     from compas.geometry import Translation
-    from compas_plotters import Plotter2
+    from compas_plotters import GeometryPlotter
+
+    plotter = GeometryPlotter()
 
     point = Point(0.0, 3.0, 0.0)
     vector = Vector(2.0, 0.0, 0.0)
@@ -63,13 +64,11 @@ if __name__ == '__main__':
     loa = Line(point, point + direction)
 
     R = Rotation.from_axis_and_angle(Vector(0.0, 0.0, 1.0), radians(3.6))
-    T = Translation(direction.scaled(0.1))
-
-    plotter = Plotter2()
+    T = Translation.from_vector(direction.scaled(0.1))
 
     plotter.add(vector, point=point, draw_point=True)
     plotter.add(loa)
-    plotter.draw(pause=1.0)
+    plotter.pause(1.0)
 
     for i in range(100):
         point.transform(T)
