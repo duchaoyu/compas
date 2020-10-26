@@ -9,10 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `compas_rhino.artists.BoxArtist.draw_collection`.
+* Added option to show/hide vertices, edges, and faces in `compas_rhino.artists.CapsuleArtist.draw`.
+* Added option to show/hide vertices, edges, and faces in `compas_rhino.artists.ConeArtist.draw`.
+* Added option to show/hide vertices, edges, and faces in `compas_rhino.artists.CylinderArtist.draw`.
+* Added option to show/hide vertices, edges, and faces in `compas_rhino.artists.PolyhedronArtist.draw`.
+* Added option to show/hide vertices, edges, and faces in `compas_rhino.artists.SphereArtist.draw`.
+* Added option to show/hide vertices, edges, and faces in `compas_rhino.artists.TorusArtist.draw`.
+* Added option to show/hide vertices, edges, and faces in `compas_rhino.artists.PolygonArtist.draw`.
+* Added option to show/hide vertices, edges, and faces in `compas_rhino.artists.PolylineArtist.draw`.
+* Added option to show/hide vertices, edges, and faces in `compas_rhino.artists.VectorArtist.draw`.
+* Added base scene artist in `compas.scene`.
+
 ### Changed
+
+* Changed implementation of `compas_rhino.artists.BoxArtist.draw`.
+* Fixed bug in `compas.geometry.Capsule`.
+* Fixed bug in `compas.geometry.Cone`.
+* Changed `compas_rhino.draw_mesh` to support Ngons if available.
+* Fixed bug in polyhedron data.
+* Rebased Rhino artists onto `compas.scene.Artist`.
 
 ### Removed
 
+* Removed `compas_rhino.artists.PointArtist.draw_collection`.
+* Removed `compas_rhino.artists.CircleArtist.draw_collection`.
+* Removed `compas_rhino.artists.LineArtist.draw_collection`.
 
 ## [0.16.9] 2020-10-21
 
@@ -20,8 +42,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Added binary STL writer.
 * Added constructor `from_euler_angles` to `compas.geometry.Transformation`.
+* Added method for adding objects from a list to `compas_plotters.GeometryPlotter`.
+* Added `compas_rhino.artists.BoxArtist`.
+* Added `compas_rhino.artists.CapsuleArtist`.
+* Added `compas.geometry.Polyhedron.from_halfspaces` and `compas.geometry.Polyhedron.from_planes`.
+* Added `compas.geometry.is_point_behind_plane` and `compas.geometry.is_point_in_polyhedron`.
+* Added `centroid` and `bounding_box` properties to `compas.geometry.Pointcloud`.
+* Added `edges` property to `compas.geometry.Box`.
+* Added `edges` property to `compas.geometry.Polyhedron`.
+* Added `compas.datastructures.network_smooth_centroid`.
 
 ### Changed
+
+* Fixed bug in handling of keys in edge attribute functions of `compas.datastructures.Halfedge`.
+* Fixed bug in `compas.geometry.Polygon.lines`.
+* Fixed bug in `compas.geometry.Polyline.lines`.
+* Changed `compas.geometry.Shape.to_vertices_and_faces` to `abstractmethod`.
+* Fixed bug in magic methods of `compas.geometry.Box`.
+* Fixed bug in `compas.geometry.Box.contains`.
+* Fixed bug in `delete_vertex` and `delete_face` in `compas.datastructures.Halfedge`.
+* Fixed bug in `delete_node` of `compas.datastructures.Graph`.
+* Fixed bug in `summary` method of `compas.datastructures.Graph` and `compas.datastructures.Halfedge`.
 
 ### Removed
 
@@ -354,6 +395,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed bug in `compas.datastructures.Mesh.face_attributes`.
 * Fixed bug in `compas.datastructures.Mesh.edges`.
 * Fixed bug in `compas.datastructures.Mesh.faces`.
+* Fixed bug in `compas.datastructures.Mesh.offset`.
 
 ### Removed
 
