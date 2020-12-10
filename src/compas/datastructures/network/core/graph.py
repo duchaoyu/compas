@@ -1286,8 +1286,6 @@ class Graph(Datastructure):
                 temp += self.neighbors(key)
             nbrs.update(temp)
             i += 1
-        if key in nbrs:
-            nbrs.remove(key)
         return list(nbrs)
 
     def neighbors_out(self, key):
