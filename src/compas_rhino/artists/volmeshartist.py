@@ -16,8 +16,13 @@ colordict = partial(color_to_colordict, colorformat='rgb', normalize=False)
 __all__ = ['VolMeshArtist']
 
 
+<<<<<<< HEAD
 class VolMeshArtist(Artist):
     """A volmesh artist defines functionality for visualising COMPAS volmeshes in Rhino.
+=======
+class VolMeshArtist(BaseArtist):
+    """Artist for drawing volmesh data structures.
+>>>>>>> upstream/master
 
     Parameters
     ----------
@@ -183,7 +188,7 @@ class VolMeshArtist(Artist):
         facets = []
         for face in faces:
             facets.append({
-                'points': [vertex_xyz[vertex] for vertex in self.volmesh.face_vertices(face)],
+                'points': [vertex_xyz[vertex] for vertex in self.volmesh.halfface_vertices(face)],
                 'name': "{}.face.{}".format(self.volmesh.name, face),
                 'color': face_color[face]})
         return compas_rhino.draw_faces(facets, layer=self.layer, clear=False, redraw=False)

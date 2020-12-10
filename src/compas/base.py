@@ -1,24 +1,51 @@
+"""
+********************************************************************************
+base
+********************************************************************************
+
+.. currentmodule:: compas.base
+
+Classes
+=======
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    Base
+
+"""
 from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-import abc
 import json
 from uuid import uuid4
 
 from compas.utilities import DataEncoder
 from compas.utilities import DataDecoder
-from compas.utilities import abstractclassmethod
-
-ABC = abc.ABCMeta('ABC', (object,), {'__slots__': ()})
 
 
 __all__ = [
     'Base',
 ]
 
+# ==============================================================================
+# If you ever feel tempted to use ABCMeta in your code: don't, just DON'T.
+# Assigning __metaclass__ = ABCMeta to a class causes a severe memory leak/performance
+# degradation on IronPython 2.7.
 
-class Base(ABC):
+# See these issues for more details:
+# - https://github.com/compas-dev/compas/issues/562
+# - https://github.com/compas-dev/compas/issues/649
+
+# ==============================================================================
+
+# import abc
+# ABC = abc.ABCMeta('ABC', (object,), {'__slots__': ()})
+
+
+class Base(object):
     """Abstract base class for all COMPAS objects.
 
     Attributes
@@ -55,9 +82,10 @@ class Base(ABC):
 
     @property
     def name(self):
-        """str :
-        The name of the object.
-        This name is not necessarily unique and can be set by the user."""
+        """str : The name of the object.
+
+        This name is not necessarily unique and can be set by the user.
+        """
         if not self._name:
             self._name = self.__class__.__name__
         return self._name
@@ -68,29 +96,26 @@ class Base(ABC):
 
     @property
     def dtype(self):
-        """str :
-        The type of the object in the form of a "2-level" import and a class name.
-        """
+        """str : The type of the object in the form of a "2-level" import and a class name."""
         return "{}/{}".format(".".join(self.__class__.__module__.split(".")[:2]), self.__class__.__name__)
 
-    @abc.abstractproperty
+    @property
     def data(self):
-        """dict :
-        The representation of the object as native Python data.
-        The structure uf the data is described by the data schema.
+        """dict : The representation of the object as native Python data.
+
+        The structure of the data is described by the data schema.
         """
-        pass
+        raise NotImplementedError
 
     @data.setter
     def data(self, data):
         pass
 
-    @abstractclassmethod
+    @classmethod
     def from_data(cls, data):
         """Construct an object of this type from the provided data."""
-        pass
+        raise NotImplementedError
 
-    @abc.abstractmethod
     def to_data(self):
         """Convert an object to its native data representation.
 
@@ -99,36 +124,36 @@ class Base(ABC):
         dict
             The data representation of the object as described by the schema.
         """
-        pass
+        raise NotImplementedError
 
-    @abstractclassmethod
+    @classmethod
     def from_json(cls, filepath):
         """Construct an object from serialised data contained in a JSON file.
 
         Parameters
         ----------
-        filepath: str
+        filepath : str
             The path to the file for serialisation.
         """
-        pass
+        raise NotImplementedError
 
-    @abc.abstractmethod
     def to_json(self, filepath):
         """Serialize the data representation of an object to a JSON file.
 
         Parameters
         ----------
-        filepath: str
+        filepath : str
             The path to the file containing the data.
         """
-        pass
+        raise NotImplementedError
 
     def __getstate__(self):
         """Return the object data for state state serialisation with older pickle protocols."""
-        return {'dtype': self.dtype, 'data': self.data}
+        return {'__dict__': self.__dict__.copy(), 'dtype': self.dtype, 'data': self.data}
 
     def __setstate__(self, state):
         """Assign an unserialised state to the object data to support older pickle protocols."""
+        self.__dict__.update(state['__dict__'])
         self.data = state['data']
 
     def validate_data(self):

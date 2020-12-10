@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from ast import literal_eval
+# from ast import literal_eval
 from random import choice
 
 import compas
@@ -70,9 +70,7 @@ class HalfFace(Datastructure):
                 "dfa": dict,
                 "dca": dict,
                 "vertex": dict,
-                "halfface": dict,
                 "cell": dict,
-                "plane": dict,
                 "edge_data": dict,
                 "face_data": dict,
                 "cell_data": dict,
@@ -90,9 +88,7 @@ class HalfFace(Datastructure):
                 "dfa": dict,
                 "dca": dict,
                 "vertex": dict,
-                "halfface": dict,
                 "cell": dict,
-                "plane": dict,
                 "edge_data": dict,
                 "face_data": dict,
                 "cell_data": dict,
@@ -107,7 +103,7 @@ class HalfFace(Datastructure):
         from packaging import version
         if version.parse(compas.__version__) < version.parse('0.17'):
             return {
-                "$schema": "http://json-schema.org/schema",
+                "$schema": "http://json-schema.org/draft-07/schema#",
                 "$id": "https://github.com/compas-dev/compas/schemas/halfface.json",
                 "$compas": compas.__version__,
 
@@ -119,9 +115,7 @@ class HalfFace(Datastructure):
                     "dfa":          {"type": "object"},
                     "dca":          {"type": "object"},
                     "vertex":       {"type": "object"},
-                    "halfface":     {"type": "object"},
                     "cell":         {"type": "object"},
-                    "plane":        {"type": "object"},
                     "face_data":    {"type": "object"},
                     "edge_data":    {"type": "object"},
                     "cell_data":    {"type": "object"},
@@ -132,13 +126,13 @@ class HalfFace(Datastructure):
                 "required": [
                     "attributes",
                     "dva", "dea", "dfa", "dca",
-                    "vertex", "halfface", "cell", "plane",
+                    "vertex", "cell",
                     "face_data", "edge_data", "cell_data",
                     "max_vertex", "max_face", "max_cell"
                 ]
             }
         return {
-            "$schema": "http://json-schema.org/schema",
+            "$schema": "http://json-schema.org/draft-07/schema#",
             "$id": "https://github.com/compas-dev/compas/schemas/halfface.json",
             "$compas": compas.__version__,
 
@@ -155,9 +149,7 @@ class HalfFace(Datastructure):
                         "dfa":          {"type": "object"},
                         "dca":          {"type": "object"},
                         "vertex":       {"type": "object"},
-                        "halfface":     {"type": "object"},
                         "cell":         {"type": "object"},
-                        "plane":        {"type": "object"},
                         "face_data":    {"type": "object"},
                         "edge_data":    {"type": "object"},
                         "cell_data":    {"type": "object"},
@@ -168,7 +160,7 @@ class HalfFace(Datastructure):
                     "required": [
                         "attributes",
                         "dva", "dea", "dfa", "dca",
-                        "vertex", "halfface", "cell", "plane",
+                        "vertex", "cell",
                         "face_data", "edge_data", "cell_data",
                         "max_vertex", "max_face", "max_cell"
                     ]
@@ -198,9 +190,13 @@ class HalfFace(Datastructure):
     def data(self):
         """dict: A data dict representing the volmesh data structure for serialisation.
         """
-        edge_data = {}
-        for e in self._edge_data:
-            edge_data[repr(e)] = self._edge_data[e]
+        cell = {}
+        for c in self._cell:
+            cell[c] = {}
+            for u in self._cell[c]:
+                cell[c].setdefault(u, {})
+                for v in self._cell[c][u]:
+                    cell[c][u][v] = self._halfface[self._cell[c][u][v]]
         data = {
             'attributes': self.attributes,
             'dva': self.default_vertex_attributes,
@@ -208,10 +204,8 @@ class HalfFace(Datastructure):
             'dfa': self.default_face_attributes,
             'dca': self.default_cell_attributes,
             'vertex': self._vertex,
-            'halfface': self._halfface,
-            'cell': self._cell,
-            'plane': self._plane,
-            'edge_data': edge_data,
+            'cell': cell,
+            'edge_data': self._edge_data,
             'face_data': self._face_data,
             'cell_data': self._cell_data,
             'max_vertex': self._max_vertex,
@@ -227,9 +221,7 @@ class HalfFace(Datastructure):
         dfa = data.get('dfa') or {}
         dca = data.get('dca') or {}
         vertex = data.get('vertex') or {}
-        halfface = data.get('halfface') or {}
         cell = data.get('cell') or {}
-        plane = data.get('plane') or {}
         edge_data = data.get('edge_data') or {}
         face_data = data.get('face_data') or {}
         cell_data = data.get('cell_data') or {}
@@ -237,7 +229,7 @@ class HalfFace(Datastructure):
         max_face = data.get('max_face', -1)
         max_cell = data.get('max_cell', -1)
 
-        if not vertex or not plane or not halfface or not cell:
+        if not vertex or not cell:
             return
 
         self.attributes.update(attributes)
@@ -258,21 +250,19 @@ class HalfFace(Datastructure):
             attr = vertex[v] or {}
             self.add_vertex(int(v), attr_dict=attr)
 
-        for f in halfface:
-            attr = face_data.get(f) or {}
-            self.add_halfface(halfface[f], fkey=int(f), attr_dict=attr)
-
         for c in cell:
             attr = cell_data.get(c) or {}
             faces = []
             for u in cell[c]:
                 for v in cell[c][u]:
-                    f = cell[c][u][v]
-                    faces.append(halfface[f])
+                    faces.append(cell[c][u][v])
             self.add_cell(faces, ckey=int(c), attr_dict=attr)
 
         for e in edge_data:
-            self._edge_data[literal_eval(e)] = edge_data[e] or {}
+            self._edge_data[e] = edge_data[e] or {}
+
+        for f in face_data:
+            self._face_data[f] = face_data[f] or {}
 
         self._max_vertex = max_vertex
         self._max_face = max_face
@@ -453,6 +443,7 @@ class HalfFace(Datastructure):
             fkey = self._max_face = self._max_face + 1
         if fkey > self._max_face:
             self._max_face = fkey
+        fkey = int(fkey)
         attr = attr_dict or {}
         attr.update(kwattr)
         self._halfface[fkey] = vertices
@@ -1923,34 +1914,34 @@ class HalfFace(Datastructure):
             return None
         return self._cell[nbr][v][u]
 
-    # def halfface_adjacent_halfface(self, halfface, halfedge):
-    #     """Return the halfface adjacent to the halfface across the halfedge.
+    def halfface_adjacent_halfface(self, halfface, halfedge):
+        """Return the halfface adjacent to the halfface across the halfedge.
 
-    #     Parameters
-    #     ----------
-    #     halfface : int
-    #         The identifier of the halfface.
-    #     halfedge : tuple of int
-    #         The identifier of the halfedge.
+        Parameters
+        ----------
+        halfface : int
+            The identifier of the halfface.
+        halfedge : tuple of int
+            The identifier of the halfedge.
 
-    #     Returns
-    #     -------
-    #     int or None
-    #         The identifier of the halfface.
+        Returns
+        -------
+        int or None
+            The identifier of the halfface.
 
-    #     Notes
-    #     -----
-    #     The adjacent face belongs a to one of the cell neighbors over faces of the initial cell.
-    #     A face and its adjacent face share two common vertices.
-    #     """
-    #     u, v = halfedge
-    #     cell = self.halfface_cell(halfface)
-    #     nbr_halfface = self._cell[cell][v][u]
-    #     w = self.face_vertex_ancestor(nbr_halfface, v)
-    #     nbr_cell = self._plane[u][v][w]
-    #     if nbr_cell is None:
-    #         return None
-    #     return self._cell[nbr_cell][v][u]
+        Notes
+        -----
+        The adjacent face belongs a to one of the cell neighbors over faces of the initial cell.
+        A face and its adjacent face share two common vertices.
+        """
+        u, v = halfedge
+        cell = self.halfface_cell(halfface)
+        nbr_halfface = self._cell[cell][v][u]
+        w = self.face_vertex_ancestor(nbr_halfface, v)
+        nbr_cell = self._plane[u][v][w]
+        if nbr_cell is None:
+            return None
+        return self._cell[nbr_cell][v][u]
 
     def halfface_vertex_ancestor(self, halfface, vertex):
         """Return the vertex before the specified vertex in a specific face.
@@ -2000,7 +1991,7 @@ class HalfFace(Datastructure):
         i = self._halfface[halfface].index(vertex)
         return self._halfface[halfface][i + 1]
 
-    def halfface_neighbors(self, halfface):
+    def halfface_manifold_neighbors(self, halfface):
         nbrs = []
         cell = self.halfface_cell(halfface)
         for u, v in self.halfface_halfedges(halfface):
@@ -2012,8 +2003,31 @@ class HalfFace(Datastructure):
                 nbrs.append(nbr)
         return nbrs
 
-    # def halfface_manifold_neighbors(self, halfface):
-    #     halfface_cell = self.halfface_cell(halfface)
+    def halfface_manifold_neighborhood(self, hfkey, ring=1):
+        """Return the halfface neighborhood of a halfface across their edges.
+        Parameters
+        ----------
+        key : hashable
+            The identifier of the halfface.
+        Returns
+        -------
+        list
+            The list of neighboring halffaces.
+        Notes
+        -----
+        Neighboring halffaces on the same cell are not included.
+        """
+        nbrs = set(self.halfface_manifold_neighbors(hfkey))
+        i = 1
+        while True:
+            if i == ring:
+                break
+            temp = []
+            for nbr_hfkey in nbrs:
+                temp += self.halfface_manifold_neighbors(nbr_hfkey)
+            nbrs.update(temp)
+            i += 1
+        return list(nbrs - set([hfkey]))
 
     def is_halfface_on_boundary(self, halfface):
         """Verify that a face is on the boundary.

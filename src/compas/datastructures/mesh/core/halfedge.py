@@ -2,7 +2,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from collections import OrderedDict
 from ast import literal_eval
 from random import sample
 from random import choice
@@ -540,10 +539,6 @@ class HalfEdge(Datastructure):
             edge = "-".join(map(str, sorted([nbr, key])))
             if edge in self.edgedata:
                 del self.edgedata[edge]
-            # if (nbr, key) in self.edgedata:
-            #     del self.edgedata[nbr, key]
-            # if (key, nbr) in self.edgedata:
-            #     del self.edgedata[key, nbr]
         for nbr in nbrs:
             for n in self.vertex_neighbors(nbr):
                 if self.halfedge[nbr][n] is None and self.halfedge[n][nbr] is None:
@@ -552,10 +547,6 @@ class HalfEdge(Datastructure):
                     edge = "-".join(map(str, sorted([nbr, n])))
                     if edge in self.edgedata:
                         del self.edgedata[edge]
-                    # if (nbr, n) in self.edgedata:
-                    #     del self.edgedata[nbr, n]
-                    # if (n, nbr) in self.edgedata:
-                    #     del self.edgedata[n, nbr]
         del self.halfedge[key]
         del self.vertex[key]
 
@@ -2529,48 +2520,18 @@ class HalfEdge(Datastructure):
         else:
             return False
 
-    # --------------------------------------------------------------------------
-    # boundary
-    # --------------------------------------------------------------------------
+    face_vertex_after = face_vertex_descendant
+    face_vertex_before = face_vertex_ancestor
 
-    def faces_on_boundary(self):
-        """Find the faces on the boundary.
+    def halfedge_after(self, u, v):
+        face = self.halfedge_face(u, v)
+        w = self.face_vertex_after(face, v)
+        return v, w
 
-        Returns
-        -------
-        list
-            The faces on the boundary.
-
-        """
-        faces = OrderedDict()
-        for key, nbrs in iter(self.halfedge.items()):
-            for nbr, fkey in iter(nbrs.items()):
-                if fkey is None:
-                    faces[self.halfedge[nbr][key]] = 1
-        return faces.keys()
-
-    def edges_on_boundary(self, chained=False):
-        """Find the edges on the boundary.
-
-        Parameters
-        ----------
-        chained : bool (``False``)
-            Indicate whether the boundary edges should be chained head to tail.
-            Note that chaining the edges will essentially return half-edges that
-            point outwards to the space outside.
-
-        Returns
-        -------
-        boundary_edges : list
-            The boundary edges.
-
-        """
-        boundary_edges = [(u, v) for u, v in self.edges() if self.is_edge_on_boundary(u, v)]
-        if not chained:
-            return boundary_edges
-        # this is not "chained"
-        # it is "oriented"
-        return [(u, v) if self.halfedge[u][v] is None else (v, u) for u, v in boundary_edges]
+    def halfedge_before(self, u, v):
+        face = self.halfedge_face(u, v)
+        t = self.face_vertex_before(face, u)
+        return t, u
 
 
 # ==============================================================================

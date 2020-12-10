@@ -199,7 +199,3 @@ class RobotModelArtist(BaseRobotModelArtist, Artist):
                 attr.Name = name
 
             obj.CommitChanges()
-
-    @staticmethod
-    def draw_collection(collection):
-        raise NotImplementedError

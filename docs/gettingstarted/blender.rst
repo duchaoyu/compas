@@ -1,3 +1,4 @@
+.. _gs-blender:
 
 *******************************************************************************
 Blender
@@ -8,11 +9,20 @@ Blender ships with its own embedded version of Python. Therefore, the simplest
 Python by the Python of a `conda` environment that already has COMPAS installed.
 
 It is important that the version of Python installed in the `conda` environment matches
-the version of Python that was originally shipped with Blender. For Blender 2.8x
+the version of Python that was originally shipped with Blender. For Blender 2.8x and 2.9x
 this is Python 3.7x.
 
 Installation
 ============
+
+If you don't have an environment yet with Python 3.7 and COMPAS you can create one with ``conda``.
+
+.. code-block:: bash
+
+    conda config --add channels conda-forge
+    conda create -n blender python=3.7 COMPAS
+
+Configuring Blender to use the newly installed environment is slightly different per OS.
 
 .. raw:: html
 
@@ -25,6 +35,9 @@ Installation
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#replace_python_osx">OSX</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#replace_python_linux">Linux</a>
+                </li>
             </ul>
         </div>
         <div class="card-body">
@@ -34,21 +47,12 @@ Installation
 
     <div class="tab-pane active" id="replace_python_windows">
 
-If you wish to install a new python environment with COMPAS, open the command prompt and type the following:
-
-.. code-block:: bash
-
-    conda config --add channels conda-forge
-    conda create -n blender python=3.7 COMPAS
-
-Now configure Blender to use the newly installed environment or any environment in which you have COMPAS:
-
 .. code-block:: bash
 
     conda activate blender
-    python -m compas_blender.install "%PROGRAMFILES%\Blender Foundation\Blender 2.83\2.83"
+    python -m compas_blender.install "%PROGRAMFILES%\\Blender Foundation\\Blender 2.91\\2.91"
 
-Note that the path ``%PROGRAMFILES%\Blender Foundation\Blender 2.83\2.83`` might be different
+Note that the path ``%PROGRAMFILES%\\Blender Foundation\\Blender 2.91\\2.91`` might be different
 if you have another version of Blender intalled.
 Check your version of Blender and change the path accordingly.
 
@@ -57,23 +61,26 @@ Check your version of Blender and change the path accordingly.
     </div>
     <div class="tab-pane" id="replace_python_osx">
 
-If you wish to install a new python environment with COMPAS, open the Terminal and type the following:
-
 .. code-block:: bash
 
-    conda config --add channels conda-forge
-    conda create -n blender python=3.7 COMPAS
+    conda activate blender
+    python -m compas_blender.install /Applications/blender.app/Contents/Resources/2.91
 
-Now configure Blender to use the newly installed environment or any environment in which you have COMPAS:
+Note that the path ``/Applications/blender.app/Contents/Resources/2.91`` might be different
+if you have another version of Blender intalled.
+Check your version of Blender and change the path accordingly.
+
+.. raw:: html
+
+    </div>
+    <div class="tab-pane" id="replace_python_linux">
 
 .. code-block:: bash
 
     conda activate blender
-    python -m compas_blender.install /Applications/blender.app/Contents/Resources/2.83
+    python -m compas_blender.install ~/Blender/2.91
 
-Note that the path ``/Applications/blender.app/Contents/Resources/2.83`` might be different
-if you have another version of Blender intalled.
-Check your version of Blender and change the path accordingly.
+Note that the path ``~/Blender/2.91`` might be different for your setup.
 
 .. raw:: html
 
@@ -114,21 +121,68 @@ Otherwise, the changes will not have any effect.
     conda install ...
 
 .. note::
-    if you want to use blender with a different environment, you simply have to activate that environment and floow the same procedure described above.
+
+    If you want to use blender with a different environment,
+    you simply have to activate that environment and follow the same procedure described above.
+
 
 Start Blender
 =============
 
 Blender uses the command window of your system to display error messages and other text output.
 On Windows, the output window can be brought to the front directly from the "Window" menu.
-On Mac, you should start Blender from the command line.
+On Mac or Linux, you should start Blender from the command line.
 
 By adding the Blender executable to the ``PATH`` variable this is really simple.
-Just add the following to your ``.bash_profile``
+Just add the following to your ``.bash_profile`` or ``.bashrc``.
+
+.. raw:: html
+
+    <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#add_blender_to_path_osx">OSX</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#add_blender_to_path_linux">Linux</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+
+.. raw:: html
+
+    <div class="tab-pane active" id="add_blender_to_path_osx">
 
 .. code-block:: bash
 
     export PATH="/Applications/blender.app/Contents/MacOS:$PATH"
+
+.. raw:: html
+
+    </div>
+
+.. raw:: html
+
+    <div class="tab-pane" id="add_blender_to_path_linux">
+
+.. code-block:: bash
+
+    export PATH="~/Blender/2.91:$PATH"
+
+Note that this path might be different on your system.
+
+.. raw:: html
+
+    </div>
+
+.. raw:: html
+
+    </div>
+    </div>
+    </div>
 
 After that starting Blender from the command line is much simpler.
 
