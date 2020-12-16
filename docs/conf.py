@@ -49,7 +49,7 @@ extensions = [
     "sphinx.ext.githubpages",
     "sphinx.ext.coverage",
     "sphinx.ext.inheritance_diagram",
-    # "sphinx.ext.graphviz",
+    "sphinx.ext.graphviz",
     "matplotlib.sphinxext.plot_directive",
     "m2r",
     "nbsphinx",
@@ -97,8 +97,8 @@ autosummary_mock_imports = [
 
 # graph options
 
-inheritance_graph_attrs = dict(rankdir="TB", size='"16.0, 16.0"', ratio="auto")
-inheritance_node_attrs = dict(fontsize=14)
+inheritance_graph_attrs = dict(rankdir="TB", size='"16.0, 10.0"', ratio="auto", resolution=150)
+inheritance_node_attrs = dict(fontsize=10)
 
 # napoleon options
 
@@ -252,7 +252,7 @@ plot_html_show_formats = False
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/", None),
-    "compas": ("https://compas-dev.github.io/compas", None),
+    "compas": ("https://compas.dev/compas/latest/", None),
 }
 
 
