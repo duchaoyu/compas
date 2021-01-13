@@ -11,6 +11,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Fix Rhino7 Mac installation path
+* Separate `compas.robots.Joint.origin` into the static parent-relative `origin` and the dynamic world-relative `current_origin`.
+* Separate `compas.robots.Joint.axis` into the static parent-relative `axis` and the dynamic world-relative `current_axis`.
+
+### Removed
+
+
+## [0.19.3] 2020-12-17
+
+### Added
+
+### Changed
+
+### Removed
+
+
+## [0.19.2] 2020-12-17
+
+### Added
+
+### Changed
+
+* Changed `compas._os.prepare_environment` to prepend environment paths (fixes problem with RPC on windows).
+
 ### Removed
 
 
