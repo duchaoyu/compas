@@ -9,11 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `RobotModel.remove_link`, `RobotModel.remove_joint`, `RobotModel.to_urdf_string`, and `RobotModel.ensure_geometry`.
+
+### Changed
+
+* Fixed bug in parameter list of function `mesh_bounding_box` bound as method `Mesh.bounding_box`.
+* Changed exception type when subdivide scheme argument is incorrect on `mesh_subdivide`.
+* The `compas_rhino.artist.RobotModelArtist` functions `draw_visual` and `draw_collision` now return list of newly created Rhino object guids.
+* Added ability of `RobotModel.add_link` to accept primitives in addition to meshes.
+* Fixed bug regarding the computation of `Joint.current_origin`.
+* Fixed bug regarding a repeated call to `RobotModel.add_joint`.
+
+### Removed
+
+
+## [1.0.0] 2021-01-18
+
+### Added
+
+* Added `compas.datastructures.mesh.trimesh_samplepoints_numpy`.
+
 ### Changed
 
 * Fix Rhino7 Mac installation path
 * Separate `compas.robots.Joint.origin` into the static parent-relative `origin` and the dynamic world-relative `current_origin`.
 * Separate `compas.robots.Joint.axis` into the static parent-relative `axis` and the dynamic world-relative `current_axis`.
+* Fixed support to convert back and forth between `compas.datastructures.Graph` and NetworkX `DiGraph`.
 
 ### Removed
 
