@@ -38,7 +38,7 @@ project = "COMPAS"
 copyright = "Block Research Group - ETH Zurich"
 author = "Tom Van Mele"
 
-release = "1.0.0"
+release = "1.1.0"
 version = ".".join(release.split(".")[0:2])
 
 master_doc = "index"
@@ -320,7 +320,7 @@ def linkcode_resolve(domain, info):
     else:
         return None
 
-    return f"https://github.com/compas-dev/compas/blob/master/src/{filename}.py#L{lineno}"
+    return f"https://github.com/compas-dev/compas/blob/main/src/{filename}.py#L{lineno}"
 
 # extlinks
 
