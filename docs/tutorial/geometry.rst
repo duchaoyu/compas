@@ -8,7 +8,7 @@ Geometry
 
 This tutorial provides a quick tour of the functionality in :mod:`compas.geometry`.
 For a complete overview, visit the API Reference:
-https://compas-dev.github.io/main/api/compas.geometry.html
+https://compas.dev/compas/latest/api/compas.geometry.html
 
 
 Points and Vectors
@@ -136,7 +136,9 @@ Many of the basic functions are also available as object methods
     >>> x.dot(y)
     0.0
 
-    >>> x.normalize()
+    >>> z = Vector(1, 2, 3)
+    >>> z.unitize()
+    Vector(0.267, 0.535, 0.802)
 
     >>> x.cross([0, 1, 0])
     Vector(0.000, 0.000, 1.000)
@@ -419,48 +421,7 @@ For a complete overview of available algorithms, see :mod:`compas.geometry`.
 Serialization
 =============
 
-All geometry objects (primitives, shapes, transformations) can be serialised to JSON format,
-and unserialised from such a representation to reconstruct an equivalent object without loss
-of information. The serialisation mechanism relies on the underlying data model.
-
-
-Notes
-=====
-
-The following representations of primitives can be used
-interchangeably as input in methods and functions.
-The representations using native Python objects also correspond to the required input
-parameters of the default constructor functions of the corresponding COMPAS objects.
-
-============  ==============================   ============
-Object        COMPAS                           Python
-------------  ------------------------------   ------------
-point         Point(float, float, float)       [float, float, float]
-vector        Vector(float, float, float)      [float, float, float]
-line          Line(point, point)               [[float, float, float], [float, float, float]]
-plane         Plane(point, vector)             [[float, float, float], [float, float, float]]
-circle        Circle(plane, float)             [[[float, float, float], [float, float, float]], float]
-polygon       Polygon(points)                  [[float, float, float], ... [float, float, float]]
-polyline      Polyline(points)                 [[float, float, float], ... [float, float, float]]
-ellipse       Ellipse(plane, float, float)     [[[float, float, float], [float, float, float]], float, float]
-frame         Frame(point, vector,  vector)    [[float, float, float], [float, float, float], [float, float, float]]
-============  ==============================   ============
-
-COMPAS primitives also support indexing, assignment, and iteration according to the above
-equivalency.
-
-::
-
-    >>> a = Point(0, 0, 0)
-    >>> x, y, z = a
-    >>> x = a[0]
-    >>> a[0] = 0
-
-::
-
-    >>> plane = Plane(Point(0, 0, 0), Vector(0, 0, 1))
-    >>> a, n = plane
-    >>> x, y, z = n
-    >>> plane[0] = Point(1, 0, 0)
-
+All geometry objects (primitives, shapes, transformations) can be serialized to JSON format,
+and deserialized from such a representation to reconstruct an equivalent object without loss
+of information. The serialization mechanism relies on the underlying data model.
 
