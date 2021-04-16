@@ -10,9 +10,94 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added support for file-like objects, path strings and URLs to most of the methods previously accepting only file paths, eg. `compas.datastructures.Datastructure`, `compas.json_dump`, `compas.json_load`, etc.
+* Added `pretty` parameter to `compas.json_dump` and `compas.json_dumps`
+
+### Changed
+
+### Removed
+
+
+## [1.4.0] 2021-04-09
+
+### Added
+
+* Added Python 3.9 support.
+* Added crease handling to catmull-clark subdivision scheme.
+* Added `compas_ghpython.get_grasshopper_userobjects_path` to retrieve User Objects target folder.
+* Added direction option for mesh thickening.
+* Added check for closed meshes.
+* Added 'loop' and 'frames' to schemes of `compas.datastructures.mesh.subdivision.mesh_subdivide`.
+
+### Changed
+
+* Fixed box scaling.
+* Fixed a bug in `Polyline.divide_polyline_by_length` related to a floating point rounding error.
+* Fixed bug in `RobotModel.zero_configuration`.
+* Fixed bug in `compas.geometry.normals`.
+* Fixed bug in `compas.datastructures.mesh.subdivision.mesh_subdivide_frames`.
+
+### Removed
+
+
+## [1.3.0] 2021-03-26
+
+### Added
+
+* Added a `invert` and `inverted` method `compas.geometry.Vector`.
+* Added unetary `__neg__` operator for `compas.geometry.Vector`.
+* Added `compas.robots.Configuration`, moved from `compas_fab`.
+
+### Changed
+
+* Fixed rhino packages installation to remove duplicates
+
+### Removed
+
+
+## [1.2.1] 2021-03-19
+
+### Added
+
+### Changed
+
+### Removed
+
+* Fixed API removals from 1.0.0 -> 1.2.0
+
+
+## [1.2.0] 2021-03-18
+
+### Added
+
+* Added `divide_polyline`, `divide_polyline_by_length`, `Polyline.split_at_corners` and `Polyline.tangent_at_point_on_polyline`.
+* Added the magic method `__str__` to `compas.geoemetry.Transformation`.
+* Added `redraw` flag to the `compas_rhino` methods `delete_object`, `delete_objects` and `purge_objects`.
+* Added the `__eq__` method for `compas.geometry.Circle` and `compas.geometry.Line`.
+* Added support for Pylance through static API definitions.
+* Added `halfedge_strip` method to `compas.datastructures.HalfEdge`.
+
 ### Changed
 
 * Fixed bug where mimic joints were considered configurable.
+* Fixed bug where `!=` gave incorrect results in Rhino for some compas objects.
+* Fixed bug where `compas_rhino.BaseArtist.redraw` did not trigger a redraw.
+* Fixed minor bugs in `compas.geometry.Polyline` and `compas.geometry.Polygon`.
+* Fixed very minor bugs in `compas.geometry.Frame` and `compas.geometry.Quaternion`.
+* Fixed bug in `compas_rhino.objects.MeshObject.modify`.
+* Fixed bug in `compas_rhino.objects.MeshObject.modify_vertices`.
+* Fixed bug in `compas_rhino.objects.MeshObject.modify_edges`.
+* Fixed bug in `compas_rhino.objects.MeshObject.modify_faces`.
+* Fixed bug in `compas_rhino.objects.VolMeshObject.modify`.
+* Fixed bug in `compas_rhino.objects.VolMeshObject.modify_vertices`.
+* Fixed bug in `compas_rhino.objects.VolMeshObject.modify_edges`.
+* Fixed bug in `compas_rhino.objects.VolMeshObject.modify_faces`.
+* Fixed bug in `compas_rhino.objects.NetworkObject.modify`.
+* Fixed bug in `compas_rhino.objects.NetworkObject.modify_vertices`.
+* Fixed bug in `compas_rhino.objects.NetworkObject.modify_edges`.
+* Changed `compas_rhino.objects.inspect` to `compas_rhino.objects.inspectors`.
+* Changed `compas_rhino.objects.select` to `compas_rhino.objects._select`.
+* Changed `compas_rhino.objects.modify` to `compas_rhino.objects._modify`.
 
 ### Removed
 
@@ -65,6 +150,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+* Fix bug in `compas.datastructures.Network.neighborhood`.
 
 ### Removed
 
@@ -106,7 +192,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Changed `is_windows` to work for CPython and IronPython.
 * Changed `compas._os` functions to use `is_windows`, `is_mono`, `is_osx`.
 * Changed IronPython checks to `compas.IPY` instead of `compas.is_ironpython`.
-* Fixed data serialisation in `compas.datastructures.HalfFace`.
+* Fixed data serialization in `compas.datastructures.HalfFace`.
 
 ### Removed
 
@@ -506,7 +592,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Added optional class parameter to `RhinoMesh.to_compas`.
-* Added max int key to serialisation of graph.
+* Added max int key to serialization of graph.
 
 ### Changed
 
@@ -700,8 +786,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Indirectly changed mesh serialisation to JSON (by changing key conversion and moving conversion into JSON methods).
-* Moved conversion of int keys of mesh data to strings for json serialisation to from/to json.
+* Indirectly changed mesh serialization to JSON (by changing key conversion and moving conversion into JSON methods).
+* Moved conversion of int keys of mesh data to strings for json serialization to from/to json.
 * Moved from/to methods for mesh into mesh definition.
 * Subdivision algorithms use fast mesh copy.
 
