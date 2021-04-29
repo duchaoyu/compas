@@ -22,13 +22,13 @@ from ._modify import mesh_move_vertex
 from ._modify import mesh_move_vertices
 from ._modify import mesh_move_face
 
-from ._object import BaseObject
+from ._object import Object
 
 
 __all__ = ['MeshObject']
 
 
-class MeshObject(BaseObject):
+class MeshObject(Object):
     """Class for representing COMPAS meshes in Rhino.
 
     Parameters
@@ -53,10 +53,10 @@ class MeshObject(BaseObject):
         'color.edges': (0, 0, 0),
         'color.faces': (0, 0, 0),
         'color.mesh': (0, 0, 0),
-        'show.mesh': True,
+        'show.mesh': False,
         'show.vertices': True,
         'show.edges': True,
-        'show.faces': False,
+        'show.faces': True,
         'show.vertexlabels': False,
         'show.facelabels': False,
         'show.edgelabels': False,
@@ -64,8 +64,8 @@ class MeshObject(BaseObject):
         'show.facenormals': False,
     }
 
-    def __init__(self, mesh, scene=None, name=None, layer=None, visible=True, settings=None):
-        super(MeshObject, self).__init__(mesh, scene, name, layer, visible)
+    def __init__(self, mesh, scene=None, name=None, visible=True, layer=None, settings=None):
+        super(MeshObject, self).__init__(mesh, scene, name, visible, layer)
         self._guids = []
         self._guid_vertex = {}
         self._guid_edge = {}
@@ -331,7 +331,7 @@ class MeshObject(BaseObject):
                 guids = self.artist.draw_edgelabels(text=text, color=self.settings['color.edges'])
                 self.guid_edgelabel = zip(guids, edges)
 
-        self.redraw()
+        # self.redraw()
 
     def select(self):
         # there is currently no "general" selection method
@@ -572,11 +572,3 @@ class MeshObject(BaseObject):
         self.anchor = anchor
         self.location = vertex_xyz[anchor]
         return True
-
-
-# ============================================================================
-# Main
-# ============================================================================
-
-if __name__ == "__main__":
-    pass

@@ -9,7 +9,7 @@ compas
     :maxdepth: 1
     :titlesonly:
 
-    compas.base
+    compas.data
     compas.datastructures
     compas.files
     compas.geometry
@@ -17,6 +17,7 @@ compas
     compas.plugins
     compas.robots
     compas.rpc
+    compas.scene
     compas.topology
     compas.utilities
 
@@ -82,7 +83,7 @@ __copyright__ = 'Copyright 2014-2019 - Block Research Group, ETH Zurich'
 __license__ = 'MIT License'
 __email__ = 'vanmelet@ethz.ch'
 
-__version__ = '1.4.0'
+__version__ = '1.5.0'
 
 
 HERE = os.path.dirname(__file__)

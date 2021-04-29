@@ -1,10 +1,9 @@
 """
 ********************************************************************************
-scene
+data
 ********************************************************************************
 
-.. currentmodule:: compas.scene
-
+.. currentmodule:: compas.data
 
 Classes
 =======
@@ -13,21 +12,21 @@ Classes
     :toctree: generated/
     :nosignatures:
 
-    BaseScene
-    BaseObject
-    BaseArtist
+    Data
+    DataEncoder
+    DataDecoder
 
 """
 from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-from .artist import BaseArtist  # noqa: F401 F403
-from .object import BaseObject  # noqa: F401 F403
-from .scene import BaseScene  # noqa: F401 F403
+from .encoders import DataEncoder
+from .encoders import DataDecoder
+from .data import Data
 
 __all__ = [
-    'BaseArtist',
-    'BaseObject',
-    'BaseScene'
+    'Data',
+    'DataEncoder',
+    'DataDecoder'
 ]

@@ -13,13 +13,13 @@ from ._modify import network_update_node_attributes
 from ._modify import network_update_edge_attributes
 from ._modify import network_move_node
 
-from ._object import BaseObject
+from ._object import Object
 
 
 __all__ = ['NetworkObject']
 
 
-class NetworkObject(BaseObject):
+class NetworkObject(Object):
     """Class for representing COMPAS networkes in Rhino.
 
     Parameters
@@ -48,8 +48,8 @@ class NetworkObject(BaseObject):
         'show.edgelabels': False,
     }
 
-    def __init__(self, network, scene=None, name=None, layer=None, visible=True, settings=None):
-        super(NetworkObject, self).__init__(network, scene, name, layer, visible)
+    def __init__(self, network, scene=None, name=None, visible=True, layer=None, settings=None):
+        super(NetworkObject, self).__init__(network, scene, name, visible, layer)
         self._guid_node = {}
         self._guid_edge = {}
         self._guid_nodelabel = {}
@@ -58,7 +58,7 @@ class NetworkObject(BaseObject):
         self._location = None
         self._scale = None
         self._rotation = None
-        self.settings.update(NetworkObject.SETTINGS)
+        self.settings.update(type(self).SETTINGS)
         if settings:
             self.settings.update(settings)
 

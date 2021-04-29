@@ -29,7 +29,7 @@ if compas.RHINO:
     from .utilities import *  # noqa: F401 F403
 
 
-__version__ = '1.4.0'
+__version__ = '1.5.0'
 
 
 PURGE_ON_DELETE = True
@@ -40,6 +40,11 @@ INSTALLABLE_PACKAGES = ['compas', 'compas_rhino', 'compas_ghpython']
 def clear():
     guids = get_objects()  # noqa: F405
     delete_objects(guids, purge=True)  # noqa: F405
+
+
+def redraw():
+    rs.EnableRedraw()
+    rs.Redraw()
 
 
 def _check_rhino_version(version):

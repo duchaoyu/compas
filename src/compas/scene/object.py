@@ -2,11 +2,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import abc
 from uuid import uuid4
 from .artist import BaseArtist
-
-ABC = abc.ABCMeta('ABC', (object,), {'__slots__': ()})
 
 
 __all__ = ['BaseObject']
@@ -15,54 +12,48 @@ __all__ = ['BaseObject']
 _ITEM_OBJECT = {}
 
 
-class BaseObject(ABC):
-    """Abstract base class for COMPAS Rhino objects.
+class BaseObject(object):
+    """Base class for all scene objects.
 
     Parameters
     ----------
-    item : {:class:`compas.geometry.Geometry`, :class:`compas.datastructures.Datastructure`}
-        A COMPAS geometry object or data structure.
-    scene : :class:`compas.scenes.Scene`, optional
+    item: :class:`compas.base.Base`
+        A COMPAS object.
+    scene: :class:`compas.scene.BaseScene`, optional
         A scene object.
-    name : str, optional
+    name: str, optional
         The name of the object.
-    visible : bool, optional
+    visible: bool, optional
         Toggle for the visibility of the object.
-    settings : dict, optional
-        A dictionary of settings.
 
     Attributes
     ----------
-    item : {:class:`compas.geometry.Geometry`, :class:`compas.datastructures.Datastructure`}
-        A COMPAS geometry object or data structure.
-    scene : :class:`compas.scenes.Scene`
+    item: :class:`compas.base.Base`
+        A COMPAS object.
+    scene: :class:`compas.scene.BaseScene`
         A scene object.
-    artist : :class:`compas_rhino.artists.Artist`
+    artist: :class:`compas.scene.BaseArtist`
         The artist matching the type of ``item``.
-    name : str
+    guid: str
+        The unique identifier of the object.
+    name: str
         The name of the object.
         This is an alias for the name of ``item``.
-    layer : str
-        The layer for drawing.
-        This is an alias for the layer of ``artist``.
-    visible : bool
+    visible: bool
         Toggle for the visibility of the object in the scene.
-    settings : dict
-        A dictionary of settings related to visualisation and interaction.
 
     """
 
-    def __init__(self, item, scene=None, name=None, visible=True, settings=None):
+    def __init__(self, item, scene=None, name=None, visible=True):
         super(BaseObject, self).__init__()
         self._item = None
-        self._id = None
+        self._guid = None
         self._scene = None
         self._artist = None
         self.scene = scene
         self.item = item
         self.name = name
         self.visible = visible
-        self.settings = settings or {}
 
     # ==========================================================================
     # Properties
@@ -90,10 +81,10 @@ class BaseObject(ABC):
         return self._artist
 
     @property
-    def id(self):
-        if not self._id:
-            self._id = uuid4()
-        return self._id
+    def guid(self):
+        if not self._guid:
+            self._guid = str(uuid4())
+        return self._guid
 
     @property
     def name(self):
@@ -120,35 +111,22 @@ class BaseObject(ABC):
         object_type = _ITEM_OBJECT[type(item)]
         return object_type(item, **kwargs)
 
-    @abc.abstractmethod
     def clear(self):
         """Clear all previously created Rhino objects."""
-        pass
+        raise NotImplementedError
 
-    @abc.abstractmethod
     def draw(self):
         """Draw the object representing the item."""
-        pass
+        raise NotImplementedError
 
-    @abc.abstractmethod
     def select(self):
         """Select the object representing the item."""
-        pass
+        raise NotImplementedError
 
-    @abc.abstractmethod
     def modify(self):
         """Modify the item represented by the object."""
-        pass
+        raise NotImplementedError
 
-    @abc.abstractmethod
     def move(self):
         """Move the item represented by the object."""
-        pass
-
-
-# ============================================================================
-# Main
-# ============================================================================
-
-if __name__ == "__main__":
-    pass
+        raise NotImplementedError

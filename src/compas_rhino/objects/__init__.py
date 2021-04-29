@@ -80,7 +80,7 @@ from ._modify import (  # noqa : F401 F403
 )
 from .inspectors import MeshVertexInspector  # noqa : F401 F403
 
-from ._object import BaseObject
+from ._object import Object
 from .meshobject import MeshObject
 from .networkobject import NetworkObject
 from .volmeshobject import VolMeshObject
@@ -89,12 +89,12 @@ from compas.datastructures import Mesh
 from compas.datastructures import Network
 from compas.datastructures import VolMesh
 
-BaseObject.register(Mesh, MeshObject)
-BaseObject.register(Network, NetworkObject)
-BaseObject.register(VolMesh, VolMeshObject)
+Object.register(Mesh, MeshObject)
+Object.register(Network, NetworkObject)
+Object.register(VolMesh, VolMeshObject)
 
 __all__ = [
-    'BaseObject',
+    'Object',
     'MeshObject',
     'NetworkObject',
     'VolMeshObject'

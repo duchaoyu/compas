@@ -4,7 +4,7 @@ from functools import partial
 
 import compas_blender
 
-from compas_blender.artists._artist import BaseArtist
+from ._artist import Artist
 from compas.utilities import color_to_colordict
 
 colordict = partial(color_to_colordict, colorformat='rgb', normalize=True)
@@ -13,22 +13,24 @@ colordict = partial(color_to_colordict, colorformat='rgb', normalize=True)
 __all__ = ['MeshArtist']
 
 
-class MeshArtist(BaseArtist):
+class MeshArtist(Artist):
     """A mesh artist defines functionality for visualising COMPAS meshes in Blender.
 
     Parameters
     ----------
     mesh : :class:`compas.datastructures.Mesh`
         A COMPAS mesh.
-    settings : dict, optional
-        A dict with custom visualisation settings.
 
     Attributes
     ----------
     mesh : :class:`compas.datastructures.Mesh`
         The COMPAS mesh associated with the artist.
-    settings : dict
-        Default settings for color, scale, tolerance, ...
+    color_vertices : 3-tuple
+        Default color of the vertices.
+    color_edges : 3-tuple
+        Default color of the edges.
+    color_faces : 3-tuple
+        Default color of the faces.
 
     Examples
     --------
@@ -39,8 +41,8 @@ class MeshArtist(BaseArtist):
         from compas_blender.artists import MeshArtist
 
         mesh = Mesh.from_obj(compas.get('faces.obj'))
-
-        MeshArtist(mesh).draw()
+        artist = MeshArtist(mesh)
+        artist.draw()
 
     """
 
@@ -246,11 +248,3 @@ class MeshArtist(BaseArtist):
         objects = compas_blender.draw_lines(lines, self.edgecollection)
         self.object_edge = zip(objects, edges)
         return objects
-
-
-# ==============================================================================
-# Main
-# ==============================================================================
-
-if __name__ == "__main__":
-    pass

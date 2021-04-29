@@ -10,10 +10,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* Added support for file-like objects, path strings and URLs to most of the methods previously accepting only file paths, eg. `compas.datastructures.Datastructure`, `compas.json_dump`, `compas.json_load`, etc.
-* Added `pretty` parameter to `compas.json_dump` and `compas.json_dumps`
+* Added infrastructure for building Grasshopper components for compas packages.
+* Added first Grasshopper component: COMPAS Info
 
 ### Changed
+
+### Removed
+
+
+## [1.5.0] 2021-04-20
+
+### Added
+
+* Added support for file-like objects, path strings and URLs to most of the methods previously accepting only file paths, eg. `compas.datastructures.Datastructure`, `compas.json_dump`, `compas.json_load`, etc.
+* Added `pretty` parameter to `compas.json_dump` and `compas.json_dumps`.
+* Added `compas.data.Data` as base object for all data objects (geometry, data structures, ...).
+
+### Changed
+
+* Moved `compas.utilities.DataEncoder` to `compas.data`.
+* Moved `compas.utilities.DataDecoder` to `compas.data`.
+* Changed base object of `compas.datastructures.Datastructure` to `compas.data.Data`.
+* Changed base object of `compas.geometry.Primitive` to `compas.data.Data`.
+* Renamed `Base` to `Data` for all data based classes.
+* Fixed calculation of triangle normals.
+* Fixed calculation of triangle areas.
 
 ### Removed
 

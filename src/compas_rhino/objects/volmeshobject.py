@@ -16,13 +16,13 @@ from ._modify import mesh_move_vertex
 from ._modify import mesh_move_vertices
 from ._modify import mesh_move_face
 
-from ._object import BaseObject
+from ._object import Object
 
 
 __all__ = ['VolMeshObject']
 
 
-class VolMeshObject(BaseObject):
+class VolMeshObject(Object):
     """Class for representing COMPAS volmeshes in Rhino.
 
     Parameters
@@ -57,13 +57,8 @@ class VolMeshObject(BaseObject):
         'show.celllabels': False,
     }
 
-    # modify = mesh_update_attributes
-    # modify_vertices = mesh_update_vertex_attributes
-    # modify_faces = mesh_update_face_attributes
-    # modify_edges = mesh_update_edge_attributes
-
-    def __init__(self, volmesh, scene=None, name=None, layer=None, visible=True, settings=None):
-        super(VolMeshObject, self).__init__(volmesh, scene, name, layer, visible)
+    def __init__(self, volmesh, scene=None, name=None, visible=True, layer=None, settings=None):
+        super(VolMeshObject, self).__init__(volmesh, scene, name, visible, layer)
         self._guids = []
         self._guid_vertex = {}
         self._guid_edge = {}
@@ -77,7 +72,7 @@ class VolMeshObject(BaseObject):
         self._location = None
         self._scale = None
         self._rotation = None
-        self.settings.update(VolMeshObject.SETTINGS)
+        self.settings.update(type(self).SETTINGS)
         if settings:
             self.settings.update(settings)
 
